@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Backend of blog platform",
   "main": "server.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
