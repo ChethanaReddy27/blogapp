@@ -7,13 +7,12 @@ import { adminRoute } from "./APIs/AdminAPI.js";
 import { authorRoute } from "./APIs/AuthorAPI.js";
 import { commonRouter } from "./APIs/CommonAPI.js";
 import cors from "cors";
-
 config(); //process.env
 
 //Create express application
 const app = exp();
 //use cors middleware
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:5173", "https://vercel.com/23eg105k42-anurageduis-projects/blogapp-frontend-pg1v/CwUHAkpzuJJvFQkP3cT9hYn4dGrc"], credentials: true }));
 //add body parser middleware
 app.use(exp.json());
 //add cookie parser middleware
@@ -43,7 +42,7 @@ connectDB();
 //dealing with invalid path
 app.use((req, res, next) => {
   console.log(req.url);
-  res.json({ message: `${req.url} is invalid path` });
+  res.json({ message: `${req.url} Backend server running successfully` });
 });
 
 //error handling middleware
