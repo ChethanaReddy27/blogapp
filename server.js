@@ -13,7 +13,7 @@ config(); //process.env
 //Create express application
 const app = exp();
 //use cors middleware
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(cors({ origin: [ "https://blogapp-frontend-pg1v.vercel.app/"], credentials: true }));
 //add body parser middleware
 app.use(exp.json());
 //add cookie parser middleware
@@ -43,7 +43,7 @@ connectDB();
 //dealing with invalid path
 app.use((req, res, next) => {
   console.log(req.url);
-  res.json({ message: `${req.url} is invalid path` });
+  res.json({ message: `${req.url} backend server running successfully` });
 });
 
 //error handling middleware
