@@ -23,7 +23,6 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 //add body parser middleware
 app.use(exp.json());
