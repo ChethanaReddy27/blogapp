@@ -5,13 +5,10 @@ import bcrypt from "bcryptjs";
 import { verifyToken } from "../middlewares/verifyToken.js";
 export const commonRouter = exp.Router();
 
-const buildCookieOptions = (req) => {
-  const isSecure = req.secure || req.headers["x-forwarded-proto"] === "https";
-  return {
-    httpOnly: true,
-    sameSite: isSecure ? "none" : "lax",
-    secure: isSecure,
-  };
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  secure: process.env.NODE_ENV === "production",
 };
 
 //login
@@ -21,7 +18,7 @@ commonRouter.post("/login", async (req, res) => {
   //call authenticate service
   let { token, user } = await authenticate(userCred);
   //save token as httpOnly cookie
-  res.cookie("token", token, buildCookieOptions(req));
+  res.cookie("token", token, cookieOptions);
   //send res
   res.status(200).json({ message: "login success", payload: user });
 });
@@ -29,7 +26,7 @@ commonRouter.post("/login", async (req, res) => {
 //logout for User, Author and Admin
 commonRouter.get("/logout", (req, res) => {
   // Clear the cookie named 'token'
-  res.clearCookie("token", buildCookieOptions(req));
+  res.clearCookie("token", cookieOptions);
 
   res.status(200).json({ message: "Logged out successfully" });
 });
