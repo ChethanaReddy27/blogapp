@@ -17,6 +17,7 @@ app.set("trust proxy", 1); // support secure cookies behind a proxy
 const allowedOrigins = [
   "https://blogapp-frontend-pg1v.vercel.app",
   "https://blogapp-frontend-osnq.vercel.app",
+  "https://blogapp-frontend-six.vercel.app",
 ];
 const corsOptions = {
   origin: (origin, callback) => {
@@ -28,7 +29,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-
+app.options("*", cors(corsOptions));
 
 //add body parser middleware
 app.use(exp.json());
