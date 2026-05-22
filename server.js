@@ -11,8 +11,20 @@ config(); //process.env
 
 //Create express application
 const app = exp();
+app.set("trust proxy", 1); // support secure cookies behind a proxy
+
 //use cors middleware
-app.use(cors({ origin: [ "https://blogapp-frontend-pg1v.vercel.app/"], credentials: true }));
+const allowedOrigins = [
+  "https://blogapp-frontend-pg1v.vercel.app",
+  "https://blogapp-frontend-osnq.vercel.app"
+];
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 //add body parser middleware
 app.use(exp.json());
 //add cookie parser middleware
