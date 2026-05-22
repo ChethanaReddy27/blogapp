@@ -18,18 +18,27 @@ const allowedOrigins = [
   "https://blogapp-frontend-pg1v.vercel.app",
   "https://blogapp-frontend-osnq.vercel.app",
   "https://blogapp-frontend-six.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:3000",
 ];
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow if origin is undefined (curl/mobile/server-to-server), in whitelist, is a vercel app, or is localhost
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".vercel.app") ||
+      /^http:\/\/localhost:\d+$/.test(origin)
+    ) {
       return callback(null, true);
     }
-    callback(new Error("Not allowed by CORS"));
+    callback(null, false); // Reject CORS cleanly without throwing 500 error in backend
   },
   credentials: true,
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 //add body parser middleware
 app.use(exp.json());
@@ -47,15 +56,17 @@ const connectDB = async () => {
   try {
     await connect(process.env.DB_URL);
     console.log("DB connection success");
-
-    //start http server
-    app.listen(process.env.PORT, () => console.log(`server started on port ${process.env.PORT}`));
   } catch (err) {
     console.log("Err in DB connection", err);
   }
 };
 
-connectDB();
+//start http server first so Render can bind to the port immediately and prevent deployment timeouts
+const port = process.env.PORT || 4000;
+app.listen(port, () => {
+  console.log(`server started on port ${port}`);
+  connectDB();
+});
 
 //dealing with invalid path
 app.use((req, res, next) => {
