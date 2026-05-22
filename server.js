@@ -16,10 +16,15 @@ app.set("trust proxy", 1); // support secure cookies behind a proxy
 //use cors middleware
 const allowedOrigins = [
   "https://blogapp-frontend-pg1v.vercel.app",
-  "https://blogapp-frontend-osnq.vercel.app"
+  "https://blogapp-frontend-osnq.vercel.app",
 ];
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error("Not allowed by CORS"));
+  },
   credentials: true,
 };
 app.use(cors(corsOptions));
